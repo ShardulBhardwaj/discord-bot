@@ -9,7 +9,8 @@ async function run() {
   console.log(`Logged in as ${client.user?.tag}!`);
   // get channel
   const channel = client.channels.cache.get(process.env.CHANNEL_ID!) as TextChannel;
-
+  
+  console.log(`Fetching Free games ${Date.now()}`)
   const freeGames = await getCurrentFreeGames();
 
   const embeds = freeGames.map(game => new MessageEmbed()
@@ -22,8 +23,11 @@ async function run() {
                                     .setImage(game.keyImages.find(image => image.type === 'Thumbnail').url)
                                     .setTimestamp()
                               )
-
-  channel.send({ embeds: embeds });
+  if (freeGames.length > 0){
+    channel.send({ embeds: embeds });
+  }else {
+    console.log("No new free Games")
+  }
 }
 
 client.on('ready', run);
